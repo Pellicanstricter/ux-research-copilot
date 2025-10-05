@@ -8,6 +8,7 @@ import os
 import logging
 from pathlib import Path
 from datetime import datetime
+import redis
 
 from config import CONFIG
 from agents import UXResearchOrchestrator
@@ -296,6 +297,70 @@ async def get_session_status(session_id: str):
         )
     except Exception as e:
         logger.error(f"Error getting results for {session_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/session/{session_id}/save")
+async def save_report(session_id: str, request: dict):
+    """Save a report with a custom name"""
+    try:
+        redis_client = redis.Redis(
+            host=CONFIG.redis_host,
+            port=CONFIG.redis_port,
+            decode_responses=True
+        )
+
+        report_name = request.get('report_name', 'Untitled Report')
+
+        # Store the report name and metadata in Redis
+        saved_report_key = f"saved_report:{session_id}"
+        redis_client.hset(saved_report_key, mapping={
+            'report_name': report_name,
+            'session_id': session_id,
+            'saved_at': datetime.now().isoformat(),
+            'status': 'saved'
+        })
+
+        # Add to list of saved reports
+        redis_client.sadd('saved_reports_list', session_id)
+
+        logger.info(f"Report saved: {report_name} (Session: {session_id})")
+
+        return {
+            "status": "success",
+            "message": "Report saved successfully",
+            "report_name": report_name,
+            "session_id": session_id
+        }
+
+    except Exception as e:
+        logger.error(f"Error saving report: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/v1/saved-reports")
+async def get_saved_reports():
+    """Get list of all saved reports"""
+    try:
+        redis_client = redis.Redis(
+            host=CONFIG.redis_host,
+            port=CONFIG.redis_port,
+            decode_responses=True
+        )
+
+        session_ids = redis_client.smembers('saved_reports_list')
+        reports = []
+
+        for session_id in session_ids:
+            report_data = redis_client.hgetall(f"saved_report:{session_id}")
+            if report_data:
+                reports.append(report_data)
+
+        # Sort by saved_at descending
+        reports.sort(key=lambda x: x.get('saved_at', ''), reverse=True)
+
+        return {"reports": reports}
+
+    except Exception as e:
+        logger.error(f"Error getting saved reports: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/v1/session/{session_id}/download/{report_type}")

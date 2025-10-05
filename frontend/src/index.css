@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+Pro:wght@400;600&family=JetBrains+Mono:wght@400&display=swap');
+
+@import "tailwindcss";
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #201E32;
+  background-color: #F8F9FA;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #0079C8;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #005363;
+}
+
+.btn-warm {
+  background-color: #F4A261;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-warm:hover {
+  background-color: #E8944D;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #0079C8;
+  border: 1px solid #0079C8;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #EFF6FF;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #E5E7EB;
+}
+
+.card-hover {
+  transition: box-shadow 0.2s;
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Input fields */
+.input {
+  border: 1px solid #D1D5DB;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  width: 100%;
+  outline: none;
+}
+
+.input:focus {
+  outline: 2px solid #0079C8;
+  outline-offset: 2px;
+  border-color: transparent;
+}
+
+/* Tags/Pills */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tag-theme {
+  background-color: #00C9A5;
+  color: white;
+}
+
+.tag-quote {
+  background-color: #5F2A82;
+  color: white;
+}
+
+.tag-insight {
+  background-color: #B4E6DA;
+  color: #201E32;
+}

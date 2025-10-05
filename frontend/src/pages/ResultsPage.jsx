@@ -1,0 +1,329 @@
+import { useState, useEffect } from 'react';
+import { api } from '../services/api';
+import logo from '../assets/logos/ux_research_copilot_logo_transparent.png';
+import owlIcon from '../assets/IconOwl.png';
+import ExportMenu from '../components/ExportMenu';
+
+export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
+  const [results, setResults] = useState(null);
+  const [status, setStatus] = useState('loading');
+  const [error, setError] = useState(null);
+  const [polling, setPolling] = useState(true);
+
+  useEffect(() => {
+    let pollInterval;
+
+    const checkStatus = async () => {
+      try {
+        const statusData = await api.getStatus(sessionId);
+
+        if (statusData.status === 'completed') {
+          setPolling(false);
+          // Fetch results
+          const resultsData = await api.getResults(sessionId);
+          console.log('Received results:', resultsData);
+          setResults(resultsData.full_report);
+          setStatus('completed');
+        } else if (statusData.status === 'failed') {
+          setPolling(false);
+          setStatus('failed');
+          setError(statusData.error_message || 'Processing failed');
+        } else {
+          setStatus('processing');
+        }
+      } catch (err) {
+        console.error('Error checking status:', err);
+        setError(err.message);
+      }
+    };
+
+    // Initial check
+    checkStatus();
+
+    // Poll every 3 seconds while processing
+    if (polling) {
+      pollInterval = setInterval(checkStatus, 3000);
+    }
+
+    return () => {
+      if (pollInterval) clearInterval(pollInterval);
+    };
+  }, [sessionId, polling]);
+
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: '#F8F9FA' }}>
+      {/* Header */}
+      <header style={{
+        background: 'linear-gradient(to bottom, #FFFFFF 0%, #FFF9F5 100%)',
+        borderBottom: '1px solid #E5E7EB',
+        padding: '1.5rem 0 1rem 0'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <img src={logo} alt="UX Research Copilot" style={{ height: '140px' }} />
+            <div>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                margin: 0,
+                fontWeight: 500,
+                letterSpacing: '0.05em'
+              }}>
+                AI-POWERED RESEARCH ANALYSIS
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '3rem 2rem' }}>
+        {/* Navigation Tabs */}
+        <div style={{ display: 'flex', gap: '0.5rem', borderBottom: '2px solid #E5E7EB', marginBottom: '2rem', alignItems: 'center' }}>
+          <button
+            onClick={onBack}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'transparent',
+              border: 'none',
+              borderBottom: '3px solid transparent',
+              color: '#6B7280',
+              fontWeight: 500,
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Upload
+          </button>
+          <button
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'white',
+              border: 'none',
+              borderBottom: '3px solid #0079C8',
+              color: '#0079C8',
+              fontWeight: 600,
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Results
+          </button>
+          <button
+            onClick={onViewSavedReports}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'transparent',
+              border: 'none',
+              borderBottom: '3px solid transparent',
+              color: '#6B7280',
+              fontWeight: 500,
+              cursor: 'pointer',
+              fontSize: '1rem'
+            }}
+          >
+            Saved Reports
+          </button>
+          <div style={{ marginLeft: 'auto' }}>
+            {status === 'completed' && results && (
+              <ExportMenu results={results} sessionId={sessionId} />
+            )}
+          </div>
+        </div>
+
+        {status === 'loading' || status === 'processing' ? (
+          <div style={{ textAlign: 'center', padding: '4rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img src={owlIcon} alt="Processing" style={{ width: '80px', height: '80px', marginBottom: '1rem', display: 'block' }} />
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, color: '#201E32', marginBottom: '1rem' }}>
+              {status === 'loading' ? 'Loading...' : 'Processing Your Research'}
+            </h2>
+            <p style={{ fontSize: '1.125rem', color: '#6B7280', marginBottom: '2rem' }}>
+              Our AI agents are analyzing your data. This typically takes 2-5 minutes.
+            </p>
+            <div style={{ display: 'inline-block', padding: '1rem 2rem', backgroundColor: '#F0F9FF', borderRadius: '0.5rem' }}>
+              <p style={{ color: '#0079C8', margin: 0, fontWeight: 500 }}>Session ID: {sessionId}</p>
+            </div>
+          </div>
+        ) : status === 'failed' ? (
+          <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>❌</div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, color: '#F9524C', marginBottom: '1rem' }}>
+              Processing Failed
+            </h2>
+            <p style={{ fontSize: '1.125rem', color: '#6B7280' }}>{error}</p>
+          </div>
+        ) : results ? (
+          <div>
+            {/* Executive Summary Section */}
+            {results.executive_summary && (
+              <div className="card" style={{ marginBottom: '3rem', borderTop: '4px solid #0079C8' }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#201E32', marginBottom: '2rem', borderBottom: '2px solid #E5E7EB', paddingBottom: '1rem' }}>
+                  Executive Summary
+                </h1>
+
+                <div style={{ marginBottom: '2rem', backgroundColor: '#F0F9FF', padding: '1.5rem', borderRadius: '0.5rem' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#0079C8', marginBottom: '0.75rem' }}>
+                    Research Question
+                  </h2>
+                  <p style={{ fontSize: '1rem', color: '#201E32', lineHeight: 1.6, margin: 0 }}>
+                    {results.executive_summary.research_question}
+                  </p>
+                </div>
+
+                <div style={{ backgroundColor: '#F0FDF4', padding: '1.5rem', borderRadius: '0.5rem', marginBottom: '1.5rem' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#065F46', marginBottom: '0.75rem' }}>
+                    Key Finding & Insight
+                  </h2>
+                  <p style={{ fontSize: '1rem', color: '#201E32', fontWeight: 600, marginBottom: '0.75rem' }}>
+                    {results.executive_summary.key_finding}
+                  </p>
+                  <p style={{ fontSize: '1rem', color: '#201E32', lineHeight: 1.6, margin: 0 }}>
+                    {results.executive_summary.key_insight}
+                  </p>
+                </div>
+
+                <div style={{ backgroundColor: '#F3F4F6', padding: '1.5rem', borderRadius: '0.5rem' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#5F2A82', marginBottom: '0.75rem' }}>
+                    Recommendation
+                  </h2>
+                  <p style={{ fontSize: '1rem', color: '#201E32', fontWeight: 600, lineHeight: 1.6, margin: 0 }}>
+                    {results.executive_summary.recommendation}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Summary Stats */}
+            <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '2rem' }}>
+                <div className="card" style={{ textAlign: 'center', borderTop: '4px solid #00C9A5' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    Key Insights
+                  </p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                    {results.summary?.total_insights || 0}
+                  </p>
+                </div>
+                <div className="card" style={{ textAlign: 'center', borderTop: '4px solid #5F2A82' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    Themes
+                  </p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                    {results.summary?.themes_identified || 0}
+                  </p>
+                </div>
+                <div className="card" style={{ textAlign: 'center', borderTop: '4px solid #0079C8' }}>
+                  <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    Quotes
+                  </p>
+                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                    {results.summary?.quotes_extracted || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Themes Section */}
+            {results.themes && results.themes.length > 0 && (
+              <div style={{ marginBottom: '3rem' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: 600, color: '#201E32', marginBottom: '1.5rem' }}>
+                  Key Themes
+                </h2>
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  {results.themes.map((theme, index) => (
+                    <div key={index} className="card" style={{ borderLeft: '4px solid #5F2A82' }}>
+                      <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#201E32', marginBottom: '0.75rem' }}>
+                        {theme.theme_name || theme.name || `Theme ${index + 1}`}
+                      </h3>
+                      <p style={{ color: '#6B7280', marginBottom: '1rem', lineHeight: 1.6 }}>
+                        {theme.summary || theme.description}
+                      </p>
+                      {theme.insights && theme.insights.length > 0 && (
+                        <div style={{ marginTop: '1rem' }}>
+                          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#201E32', marginBottom: '0.5rem' }}>
+                            Supporting Quotes:
+                          </p>
+                          {theme.insights.slice(0, 3).map((insight, qIndex) => (
+                            <div key={qIndex} style={{
+                              backgroundColor: '#F9FAFB',
+                              padding: '0.75rem',
+                              borderLeft: '3px solid #5F2A82',
+                              marginBottom: '0.5rem',
+                              fontStyle: 'italic',
+                              color: '#374151'
+                            }}>
+                              "{insight.quote}"
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Insights Section */}
+            {results.key_insights && results.key_insights.length > 0 && (
+              <div style={{ marginBottom: '3rem' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: 600, color: '#201E32', marginBottom: '1.5rem' }}>
+                  Key Insights
+                </h2>
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  {results.key_insights.map((insight, index) => (
+                    <div key={index} className="card" style={{ borderLeft: '4px solid #00C9A5' }}>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#201E32', marginBottom: '0.5rem' }}>
+                        {insight.title}
+                      </h3>
+                      <p style={{ color: '#6B7280', lineHeight: 1.6, marginBottom: '1rem' }}>
+                        {insight.main_finding}
+                      </p>
+                      {insight.supporting_quotes && insight.supporting_quotes.length > 0 && (
+                        <div style={{ marginTop: '0.75rem' }}>
+                          {insight.supporting_quotes.map((quoteObj, qIndex) => (
+                            <div key={qIndex} style={{
+                              backgroundColor: '#F0FDF4',
+                              padding: '0.75rem',
+                              borderLeft: '3px solid #00C9A5',
+                              marginBottom: '0.5rem',
+                              fontStyle: 'italic',
+                              color: '#374151',
+                              fontSize: '0.9rem'
+                            }}>
+                              "{quoteObj.quote}"
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Recommendations Section */}
+            {results.recommendations && results.recommendations.length > 0 && (
+              <div style={{ marginBottom: '3rem' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: 600, color: '#201E32', marginBottom: '1.5rem' }}>
+                  Recommendations
+                </h2>
+                <div style={{ display: 'grid', gap: '1rem' }}>
+                  {results.recommendations.map((rec, index) => (
+                    <div key={index} className="card" style={{ borderLeft: '4px solid #0079C8' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#201E32', marginBottom: '0.5rem' }}>
+                        {rec.title || `Recommendation ${index + 1}`}
+                      </h3>
+                      <p style={{ color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
+                        {rec.description || rec}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : null}
+      </main>
+    </div>
+  );
+}

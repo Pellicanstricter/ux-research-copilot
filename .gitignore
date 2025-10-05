@@ -17,3 +17,27 @@ outputs/
 
 # OS files
 .DS_Store
+
+# Redis dump
+dump.rdb
+
+# Temp files
+config.py.save
+*.save
+
+# Sample data (optional - remove if you want to include)
+sample_data/
+
+# Old streamlit app
+streamlit/
+
+# Tests (include these if you have tests)
+# tests/
+
+# Nested project folder (duplicate)
+ux-research-copilot/
+
+# Frontend node_modules
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
