@@ -14,7 +14,7 @@ import os
 try:
     import faiss
     import numpy as np
-    from sentence_transformers import SentenceTransformer
+    from langchain_openai import OpenAIEmbeddings
 except ImportError:
     print("⚠️  Some optional dependencies missing - continuing without them")
 
@@ -633,7 +633,11 @@ class ThemeSynthesizer(BaseAgent):
         )
         
         try:
-            self.embedding_model = SentenceTransformer(config.embedding_model)
+            # Use OpenAI embeddings (lightweight, no PyTorch needed)
+            self.embedding_model = OpenAIEmbeddings(
+                api_key=config.openai_api_key,
+                model="text-embedding-3-small"  # Smaller, faster, cheaper
+            )
         except Exception as e:
             self.logger.warning(f"Failed to load embedding model: {e}")
             self.embedding_model = None
