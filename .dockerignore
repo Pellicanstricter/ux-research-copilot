@@ -1,3 +1,9 @@
+# Virtual environments (IMPORTANT - keeps image small)
+**/venv
+**/.venv
+**/env
+**/ENV
+
 # Python
 __pycache__/
 *.py[cod]
@@ -6,7 +12,10 @@ __pycache__/
 .Python
 env/
 venv/
+.venv/
 ENV/
+env.bak/
+venv.bak/
 build/
 develop-eggs/
 dist/
