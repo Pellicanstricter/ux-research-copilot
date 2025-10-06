@@ -8,8 +8,8 @@ load_dotenv()
 class AgentConfig:
     """Configuration for the multi-agent system"""
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
-    redis_host: str = os.getenv("REDIS_HOST", "localhost")
-    redis_port: int = int(os.getenv("REDIS_PORT", "6379"))
+    redis_host: str = os.getenv("REDISHOST", os.getenv("REDIS_HOST", "localhost"))
+    redis_port: int = int(os.getenv("REDISPORT", os.getenv("REDIS_PORT", "6379")))
     embedding_model: str = "all-MiniLM-L6-v2"
     chunk_size: int = 1000
     chunk_overlap: int = 200
