@@ -43,6 +43,8 @@ class BaseAgent(ABC):
         self.logger = logging.getLogger(f"{self.__class__.__name__}")
         
         try:
+            has_password = bool(config.redis_password)
+            self.logger.info(f"Connecting to Redis at {config.redis_host}:{config.redis_port} (password: {has_password})")
             self.redis_client = redis.Redis(
                 host=config.redis_host,
                 port=config.redis_port,
@@ -51,6 +53,7 @@ class BaseAgent(ABC):
             )
             # Test connection
             self.redis_client.ping()
+            self.logger.info("Redis connection successful")
         except Exception as e:
             self.logger.warning(f"Redis connection failed - running without session persistence: {e}")
             self.redis_client = None
