@@ -116,6 +116,7 @@ async def process_files_background(file_paths: TypingList[str], session_id: str)
         redis_client = redis.Redis(
             host=CONFIG.redis_host,
             port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
             decode_responses=True
         )
         redis_client.ping()
@@ -174,6 +175,7 @@ async def get_session_results(session_id: str):
         redis_client = redis.Redis(
             host=CONFIG.redis_host,
             port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
             decode_responses=True
         )
         
@@ -243,6 +245,7 @@ async def get_session_status(session_id: str):
         redis_client = redis.Redis(
             host=CONFIG.redis_host,
             port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
             decode_responses=True
         )
         
@@ -306,6 +309,7 @@ async def save_report(session_id: str, request: dict):
         redis_client = redis.Redis(
             host=CONFIG.redis_host,
             port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
             decode_responses=True
         )
 
@@ -343,6 +347,7 @@ async def get_saved_reports():
         redis_client = redis.Redis(
             host=CONFIG.redis_host,
             port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
             decode_responses=True
         )
 
@@ -409,6 +414,7 @@ async def health_check():
         redis_client = redis.Redis(
             host=CONFIG.redis_host,
             port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
             decode_responses=True
         )
         redis_client.ping()
