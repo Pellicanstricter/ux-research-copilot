@@ -51,8 +51,8 @@ class BaseAgent(ABC):
             )
             # Test connection
             self.redis_client.ping()
-        except redis.ConnectionError:
-            self.logger.warning("Redis connection failed - running without session persistence")
+        except Exception as e:
+            self.logger.warning(f"Redis connection failed - running without session persistence: {e}")
             self.redis_client = None
         
     @abstractmethod
