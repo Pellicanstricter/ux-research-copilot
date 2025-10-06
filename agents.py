@@ -44,8 +44,9 @@ class BaseAgent(ABC):
         
         try:
             self.redis_client = redis.Redis(
-                host=config.redis_host, 
-                port=config.redis_port, 
+                host=config.redis_host,
+                port=config.redis_port,
+                password=config.redis_password if config.redis_password else None,
                 decode_responses=True
             )
             # Test connection
@@ -1340,6 +1341,7 @@ class UXResearchOrchestrator:
             redis_client = redis.Redis(
                 host=self.config.redis_host,
                 port=self.config.redis_port,
+                password=self.config.redis_password if self.config.redis_password else None,
                 decode_responses=True
             )
             redis_client.ping()
