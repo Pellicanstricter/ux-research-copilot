@@ -1,4 +1,12 @@
 export const sampleReport = {
+  executive_summary: {
+    research_question: "How can we improve user experience and increase product adoption?",
+    key_finding: "70% of users struggle with navigation, leading to task abandonment",
+    key_insight: "Critical usability issues are preventing users from effectively utilizing the platform. Navigation confusion, performance problems, and lack of onboarding are the primary barriers to adoption and satisfaction.",
+    recommendation: "Prioritize navigation redesign, performance optimization, and comprehensive onboarding to improve user success rates and product adoption.",
+    participant_count: 10,
+    methodology: "User Interviews"
+  },
   themes: [
     {
       theme_name: "Navigation & Usability Concerns",
