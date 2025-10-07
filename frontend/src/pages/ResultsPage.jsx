@@ -154,74 +154,84 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
           </div>
         ) : results ? (
           <div>
+            {/* Summary Stats Dashboard - Moved to top */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                <div className="card" style={{ textAlign: 'center', borderTop: '3px solid #00C9A5', padding: '1rem' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    Key Insights
+                  </p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                    {results.key_insights?.length || 0}
+                  </p>
+                </div>
+                <div className="card" style={{ textAlign: 'center', borderTop: '3px solid #5F2A82', padding: '1rem' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    Themes
+                  </p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                    {results.themes?.length || 0}
+                  </p>
+                </div>
+                <div className="card" style={{ textAlign: 'center', borderTop: '3px solid #0079C8', padding: '1rem' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#6B7280', marginBottom: '0.25rem', textTransform: 'uppercase', fontWeight: 600 }}>
+                    Quotes
+                  </p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                    {results.key_insights?.reduce((total, insight) => total + (insight.supporting_quotes?.length || 0), 0) || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Executive Summary Section */}
             {results.executive_summary && (
-              <div className="card" style={{ marginBottom: '3rem', borderTop: '4px solid #0079C8' }}>
-                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#201E32', marginBottom: '2rem', borderBottom: '2px solid #E5E7EB', paddingBottom: '1rem' }}>
+              <div className="card" style={{
+                marginBottom: '3rem',
+                borderTop: '4px solid #0079C8',
+                maxWidth: '1280px',
+                margin: '0 auto 3rem auto',
+                aspectRatio: '16 / 9',
+                display: 'flex',
+                flexDirection: 'column',
+                overflow: 'hidden',
+                padding: '1.5rem'
+              }}>
+                <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#201E32', marginBottom: '1rem', borderBottom: '2px solid #E5E7EB', paddingBottom: '0.5rem' }}>
                   Executive Summary
                 </h1>
 
-                <div style={{ marginBottom: '2rem', backgroundColor: '#F0F9FF', padding: '1.5rem', borderRadius: '0.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#0079C8', marginBottom: '0.75rem' }}>
+                <div style={{ marginBottom: '0.75rem', backgroundColor: '#F0F9FF', padding: '1rem', borderRadius: '0.5rem' }}>
+                  <h2 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0079C8', marginBottom: '0.5rem' }}>
                     Research Question
                   </h2>
-                  <p style={{ fontSize: '1rem', color: '#201E32', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: '0.85rem', color: '#201E32', lineHeight: 1.4, margin: 0 }}>
                     {results.executive_summary.research_question}
                   </p>
                 </div>
 
-                <div style={{ backgroundColor: '#F0FDF4', padding: '1.5rem', borderRadius: '0.5rem', marginBottom: '1.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#065F46', marginBottom: '0.75rem' }}>
+                <div style={{ backgroundColor: '#F0FDF4', padding: '1rem', borderRadius: '0.5rem', marginBottom: '0.75rem', flex: 1 }}>
+                  <h2 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#065F46', marginBottom: '0.5rem' }}>
                     Key Finding & Insight
                   </h2>
-                  <p style={{ fontSize: '1rem', color: '#201E32', fontWeight: 600, marginBottom: '0.75rem' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#201E32', fontWeight: 600, marginBottom: '0.5rem' }}>
                     {results.executive_summary.key_finding}
                   </p>
-                  <p style={{ fontSize: '1rem', color: '#201E32', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: '0.85rem', color: '#201E32', lineHeight: 1.4, margin: 0 }}>
                     {results.executive_summary.key_insight}
                   </p>
                 </div>
 
-                <div style={{ backgroundColor: '#F3F4F6', padding: '1.5rem', borderRadius: '0.5rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#5F2A82', marginBottom: '0.75rem' }}>
+                <div style={{ backgroundColor: '#F3F4F6', padding: '1rem', borderRadius: '0.5rem' }}>
+                  <h2 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#5F2A82', marginBottom: '0.5rem' }}>
                     Recommendation
                   </h2>
-                  <p style={{ fontSize: '1rem', color: '#201E32', fontWeight: 600, lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: '0.85rem', color: '#201E32', fontWeight: 600, lineHeight: 1.4, margin: 0 }}>
                     {results.executive_summary.recommendation}
                   </p>
                 </div>
               </div>
             )}
-
-            {/* Summary Stats */}
-            <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '2rem' }}>
-                <div className="card" style={{ textAlign: 'center', borderTop: '4px solid #00C9A5' }}>
-                  <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                    Key Insights
-                  </p>
-                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
-                    {results.summary?.total_insights || 0}
-                  </p>
-                </div>
-                <div className="card" style={{ textAlign: 'center', borderTop: '4px solid #5F2A82' }}>
-                  <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                    Themes
-                  </p>
-                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
-                    {results.summary?.themes_identified || 0}
-                  </p>
-                </div>
-                <div className="card" style={{ textAlign: 'center', borderTop: '4px solid #0079C8' }}>
-                  <p style={{ fontSize: '0.875rem', color: '#6B7280', marginBottom: '0.5rem', textTransform: 'uppercase', fontWeight: 600 }}>
-                    Quotes
-                  </p>
-                  <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
-                    {results.summary?.quotes_extracted || 0}
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Themes Section */}
             {results.themes && results.themes.length > 0 && (
@@ -231,7 +241,15 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
                 </h2>
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                   {results.themes.map((theme, index) => (
-                    <div key={index} className="card" style={{ borderLeft: '4px solid #5F2A82' }}>
+                    <div key={index} className="card" style={{
+                      borderLeft: '4px solid #5F2A82',
+                      maxWidth: '1280px',
+                      margin: '0 auto',
+                      aspectRatio: '16 / 9',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      overflow: 'auto'
+                    }}>
                       <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#201E32', marginBottom: '0.75rem' }}>
                         {theme.theme_name || theme.name || `Theme ${index + 1}`}
                       </h3>
@@ -271,7 +289,15 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
                 </h2>
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                   {results.key_insights.map((insight, index) => (
-                    <div key={index} className="card" style={{ borderLeft: '4px solid #00C9A5' }}>
+                    <div key={index} className="card" style={{
+                      borderLeft: '4px solid #00C9A5',
+                      maxWidth: '1280px',
+                      margin: '0 auto',
+                      aspectRatio: '16 / 9',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      overflow: 'auto'
+                    }}>
                       <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#201E32', marginBottom: '0.5rem' }}>
                         {insight.title}
                       </h3>

@@ -654,15 +654,20 @@ class ThemeSynthesizer(BaseAgent):
             input_variables=["insights"],
             template="""
             As a senior UX researcher, analyze these related insights and create a comprehensive theme summary.
-            
+
             Insights:
             {insights}
-            
+
+            IMPORTANT: Only create themes that represent genuine, distinct patterns in the data. Aim for 1-5 themes total.
+            - If insights are very similar, group them into ONE theme
+            - Avoid creating redundant or overlapping themes
+            - Quality over quantity - fewer, clearer themes are better
+
             Create a theme that includes:
             1. A clear, descriptive theme name
             2. Priority level (High/Medium/Low) based on frequency and impact
             3. A comprehensive summary of the theme
-            
+
             Return your analysis as a JSON object with the structure:
             {{
                 "theme_name": "Clear Theme Name",
@@ -812,7 +817,14 @@ class KeyInsightSynthesizer(BaseAgent):
             THEME SUMMARIES:
             {theme_summaries}
 
-            Create 3-5 Key Insight cards. Each card should:
+            Create 1-5 Key Insight cards based on what the data actually supports. Focus on quality over quantity - only create insights that are:
+            - Strongly supported by multiple quotes
+            - Actionable and specific
+            - Clearly differentiated from each other
+
+            If the data only supports 1-2 strong insights, that's better than forcing 5 weak ones.
+
+            Each insight card should:
             1. Have a clear, compelling title (e.g., "Control & Transparency", "Privacy & Information Concerns")
             2. Include ONE main finding statement (what users want/feel/do)
             3. Specify the finding type: "positive" (users like), "negative" (users dislike), "critical" (must-have), or "neutral"
