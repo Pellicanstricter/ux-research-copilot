@@ -2,19 +2,23 @@ import { useState } from 'react';
 import UploadPage from './pages/UploadPage';
 import ResultsPage from './pages/ResultsPage';
 import SavedReportsPage from './pages/SavedReportsPage';
+import { sampleReport } from './data/sampleReport';
 import './index.css';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('upload');
   const [sessionId, setSessionId] = useState(null);
+  const [isSampleReport, setIsSampleReport] = useState(false);
 
   const goToResults = (sid) => {
     setSessionId(sid);
+    setIsSampleReport(false);
     setCurrentPage('results');
   };
 
   const goToUpload = () => {
     setCurrentPage('upload');
+    setIsSampleReport(false);
     // Keep sessionId so user can return to results
   };
 
@@ -30,6 +34,13 @@ function App() {
 
   const loadSavedReport = (sid) => {
     setSessionId(sid);
+    setIsSampleReport(false);
+    setCurrentPage('results');
+  };
+
+  const goToSampleReport = () => {
+    setSessionId('sample');
+    setIsSampleReport(true);
     setCurrentPage('results');
   };
 
@@ -41,6 +52,7 @@ function App() {
           hasSession={!!sessionId}
           onViewResults={goBackToResults}
           onViewSavedReports={goToSavedReports}
+          onViewSampleReport={goToSampleReport}
         />
       ) : currentPage === 'savedReports' ? (
         <SavedReportsPage
@@ -54,6 +66,8 @@ function App() {
           sessionId={sessionId}
           onBack={goToUpload}
           onViewSavedReports={goToSavedReports}
+          isSampleReport={isSampleReport}
+          sampleData={isSampleReport ? sampleReport : null}
         />
       )}
     </>

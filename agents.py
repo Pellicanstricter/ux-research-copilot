@@ -231,28 +231,30 @@ class InsightAnalyzer(BaseAgent):
             input_variables=["text_chunk"],
             template="""
             As an expert UX researcher, analyze the following transcript chunk and extract key insights.
-            
+
             Transcript:
             {text_chunk}
-            
+
             Extract insights focusing on:
             1. User pain points and frustrations
-            2. User goals and motivations  
+            2. User goals and motivations
             3. Behavioral patterns
             4. Feature requests or suggestions
             5. Emotional reactions
-            
+
             For each insight, provide:
             - Exact quote from the transcript
             - Speaker (if identifiable)
-            - Theme category (e.g., "Navigation Issues", "Feature Request", "User Goal")
+            - Theme category: IMPORTANT - Use broad, general theme names. Try to group related insights under the same theme name.
+              Limit yourself to 3-5 distinct theme names across ALL insights. Examples: "Navigation & Usability", "Feature Requests",
+              "User Goals", "Pain Points", "Emotional Responses". Avoid creating overly specific themes.
             - Sentiment (Positive, Negative, or Neutral)
             - Confidence score (0-1)
             - Context (brief description)
             - Timestamp (if available)
-            
+
             Return a JSON list of insights. If no significant insights are found, return an empty list.
-            
+
             {format_instructions}
             """
         ).partial(format_instructions=self.parser.get_format_instructions())
@@ -361,28 +363,30 @@ class InsightAnalyzer(BaseAgent):
             input_variables=["text_chunk"],
             template="""
             As an expert UX researcher, analyze the following transcript chunk and extract key insights.
-            
+
             Transcript:
             {text_chunk}
-            
+
             Extract insights focusing on:
             1. User pain points and frustrations
-            2. User goals and motivations  
+            2. User goals and motivations
             3. Behavioral patterns
             4. Feature requests or suggestions
             5. Emotional reactions
-            
+
             For each insight, provide:
             - Exact quote from the transcript
             - Speaker (if identifiable)
-            - Theme category (e.g., "Navigation Issues", "Feature Request", "User Goal")
+            - Theme category: IMPORTANT - Use broad, general theme names. Try to group related insights under the same theme name.
+              Limit yourself to 3-5 distinct theme names across ALL insights. Examples: "Navigation & Usability", "Feature Requests",
+              "User Goals", "Pain Points", "Emotional Responses". Avoid creating overly specific themes.
             - Sentiment (Positive, Negative, or Neutral)
             - Confidence score (0-1)
             - Context (brief description)
             - Timestamp (if available)
-            
+
             Return a JSON list of insights. If no significant insights are found, return an empty list.
-            
+
             {format_instructions}
             """
         ).partial(format_instructions=self.parser.get_format_instructions())
@@ -705,14 +709,15 @@ class ThemeSynthesizer(BaseAgent):
         try:
             # Cluster insights by theme similarity
             theme_clusters = await self._cluster_insights(insights)
-            
+
+            # Limit is already applied in _cluster_insights, so theme_clusters is already limited to 5
             self.update_session_status(
                 ProcessingStatus.PROCESSING,
                 themes_identified=len(theme_clusters)
             )
-            
+
             return theme_clusters
-            
+
         except Exception as e:
             self.logger.error(f"Error synthesizing themes: {str(e)}")
             raise

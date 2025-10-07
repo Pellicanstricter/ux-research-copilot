@@ -8,7 +8,7 @@ import analyzeIcon from '../assets/Analyize.png';
 import presentIcon from '../assets/Present.png';
 import folderIcon from '../assets/Folder.png';
 
-export default function UploadPage({ onProcessingStarted, hasSession, onViewResults, onViewSavedReports }) {
+export default function UploadPage({ onProcessingStarted, hasSession, onViewResults, onViewSavedReports, onViewSampleReport }) {
   const [files, setFiles] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -90,9 +90,39 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           }}>
             User Interviews to Presentation in <span style={{ color: '#C65D5D', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>One Click<img src={eyesIcon} alt="Eyes" style={{ width: '3.5rem', height: '3.5rem', verticalAlign: 'middle' }} /></span>
           </h2>
-          <p style={{ fontSize: '1.125rem', color: '#6B7280', maxWidth: '900px', lineHeight: 1.6 }}>
+          <p style={{ fontSize: '1.125rem', color: '#6B7280', maxWidth: '900px', lineHeight: 1.6, marginBottom: '1.5rem' }}>
             Create compelling presentations with your data. Upload your interview transcripts and we'll generate research insights and recommendations in under <span style={{ color: '#0079C8', fontWeight: 600 }}>5 minutes</span>—ready to present.
           </p>
+          <button
+            onClick={onViewSampleReport}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#0079C8',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#005A9C';
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(0, 121, 200, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#0079C8';
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = 'none';
+            }}
+          >
+            <img src={presentIcon} alt="Present" style={{ width: '20px', height: '20px' }} />
+            View Sample Report
+          </button>
         </div>
 
         {/* Navigation Tabs */}
