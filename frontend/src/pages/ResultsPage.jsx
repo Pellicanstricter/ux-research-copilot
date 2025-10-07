@@ -22,6 +22,11 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
           // Fetch results
           const resultsData = await api.getResults(sessionId);
           console.log('Received results:', resultsData);
+          console.log('Key insights:', resultsData.full_report?.key_insights);
+          console.log('Quote count test:', resultsData.full_report?.key_insights?.map(i => ({
+            title: i.title,
+            quoteCount: i.supporting_quotes?.length || 0
+          })));
           setResults(resultsData.full_report);
           setStatus('completed');
         } else if (statusData.status === 'failed') {
@@ -178,7 +183,26 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
                     Quotes
                   </p>
                   <p style={{ fontSize: '1.75rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
-                    {results.key_insights?.reduce((total, insight) => total + (insight.supporting_quotes?.length || 0), 0) || 0}
+                    {(() => {
+                      let total = 0;
+                      // Count quotes from insights
+                      if (results.key_insights) {
+                        results.key_insights.forEach(insight => {
+                          total += insight.supporting_quotes?.length || 0;
+                        });
+                      }
+                      // Count quotes from themes
+                      if (results.themes) {
+                        results.themes.forEach(theme => {
+                          if (theme.insights) {
+                            theme.insights.forEach(insight => {
+                              total += 1; // Each insight in theme is a quote
+                            });
+                          }
+                        });
+                      }
+                      return total;
+                    })()}
                   </p>
                 </div>
               </div>
@@ -248,7 +272,8 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
                       aspectRatio: '16 / 9',
                       display: 'flex',
                       flexDirection: 'column',
-                      overflow: 'auto'
+                      overflow: 'hidden',
+                      padding: '1.5rem'
                     }}>
                       <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#201E32', marginBottom: '0.75rem' }}>
                         {theme.theme_name || theme.name || `Theme ${index + 1}`}
@@ -296,7 +321,8 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
                       aspectRatio: '16 / 9',
                       display: 'flex',
                       flexDirection: 'column',
-                      overflow: 'auto'
+                      overflow: 'hidden',
+                      padding: '1.5rem'
                     }}>
                       <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#201E32', marginBottom: '0.5rem' }}>
                         {insight.title}

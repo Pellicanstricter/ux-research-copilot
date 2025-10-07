@@ -739,8 +739,9 @@ class ThemeSynthesizer(BaseAgent):
         
         # Sort by frequency and priority
         theme_clusters.sort(key=lambda x: (x.priority == "High", x.frequency), reverse=True)
-        
-        return theme_clusters
+
+        # Limit to max 5 themes (prioritize high-value themes)
+        return theme_clusters[:5]
     
     async def _create_theme_cluster(self, theme_name: str, insights: List[InsightData]) -> ThemeCluster:
         """Create a comprehensive theme cluster"""
