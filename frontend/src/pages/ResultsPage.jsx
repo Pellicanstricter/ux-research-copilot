@@ -9,6 +9,21 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
   const [polling, setPolling] = useState(true);
+  const [showMethodologyForm, setShowMethodologyForm] = useState(false);
+  const [methodology, setMethodology] = useState({
+    method: 'User Interviews',
+    participants: 0,
+    dateRange: '',
+    duration: '',
+    objectives: ''
+  });
+  const [showResearchGoalsForm, setShowResearchGoalsForm] = useState(false);
+  const [researchGoals, setResearchGoals] = useState({
+    goals: [''],
+    background: [''],
+    assumptions: [''],
+    purpose: ''
+  });
 
   useEffect(() => {
     let pollInterval;
@@ -28,6 +43,14 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
             quoteCount: i.supporting_quotes?.length || 0
           })));
           setResults(resultsData.full_report);
+
+          // Auto-detect methodology values
+          const detectedParticipants = resultsData.full_report?.themes?.length || 0;
+          setMethodology(prev => ({
+            ...prev,
+            participants: detectedParticipants
+          }));
+
           setStatus('completed');
         } else if (statusData.status === 'failed') {
           setPolling(false);
@@ -206,6 +229,243 @@ export default function ResultsPage({ sessionId, onBack, onViewSavedReports }) {
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Methodology Slide */}
+            <div style={{ marginBottom: '3rem' }}>
+              {!showMethodologyForm ? (
+                <div className="card" style={{
+                  maxWidth: '1280px',
+                  margin: '0 auto 3rem auto',
+                  aspectRatio: '16 / 9',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  padding: '1.5rem',
+                  borderTop: '4px solid #F9524C'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#201E32', margin: 0 }}>
+                      Research Methodology
+                    </h1>
+                    <button
+                      onClick={() => setShowMethodologyForm(true)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: '#F9524C',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '0.375rem',
+                        cursor: 'pointer',
+                        fontSize: '0.875rem',
+                        fontWeight: 600
+                      }}
+                    >
+                      Edit Details
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', flex: 1 }}>
+                    <div style={{ backgroundColor: '#FFF5F5', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <h2 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#F9524C', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                        Research Method
+                      </h2>
+                      <p style={{ fontSize: '1rem', color: '#201E32', margin: 0 }}>
+                        {methodology.method}
+                      </p>
+                    </div>
+
+                    <div style={{ backgroundColor: '#F0F9FF', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <h2 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#0079C8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                        Participants
+                      </h2>
+                      <p style={{ fontSize: '1rem', color: '#201E32', margin: 0 }}>
+                        {methodology.participants || 'Not specified'}
+                      </p>
+                    </div>
+
+                    <div style={{ backgroundColor: '#F0FDF4', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <h2 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#065F46', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                        Date Range
+                      </h2>
+                      <p style={{ fontSize: '1rem', color: '#201E32', margin: 0 }}>
+                        {methodology.dateRange || 'Not specified'}
+                      </p>
+                    </div>
+
+                    <div style={{ backgroundColor: '#FAF5FF', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <h2 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#5F2A82', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                        Session Duration
+                      </h2>
+                      <p style={{ fontSize: '1rem', color: '#201E32', margin: 0 }}>
+                        {methodology.duration || 'Not specified'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {methodology.objectives && (
+                    <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem', marginTop: '1rem' }}>
+                      <h2 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                        Research Objectives
+                      </h2>
+                      <p style={{ fontSize: '0.9rem', color: '#201E32', margin: 0, lineHeight: 1.4 }}>
+                        {methodology.objectives}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="card" style={{
+                  maxWidth: '1280px',
+                  margin: '0 auto 3rem auto',
+                  padding: '2rem',
+                  borderTop: '4px solid #F9524C'
+                }}>
+                  <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#201E32', marginBottom: '1.5rem' }}>
+                    Edit Research Methodology
+                  </h1>
+
+                  <div style={{ display: 'grid', gap: '1rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>
+                        Research Method
+                      </label>
+                      <select
+                        value={methodology.method}
+                        onChange={(e) => setMethodology({...methodology, method: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '0.5rem',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '0.375rem',
+                          fontSize: '1rem'
+                        }}
+                      >
+                        <option>User Interviews</option>
+                        <option>Usability Testing</option>
+                        <option>Survey</option>
+                        <option>Focus Group</option>
+                        <option>Field Study</option>
+                        <option>Diary Study</option>
+                        <option>Card Sorting</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>
+                          Participants
+                        </label>
+                        <input
+                          type="number"
+                          value={methodology.participants}
+                          onChange={(e) => setMethodology({...methodology, participants: e.target.value})}
+                          style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            border: '1px solid #D1D5DB',
+                            borderRadius: '0.375rem',
+                            fontSize: '1rem'
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>
+                          Date Range
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g., Jan 2025"
+                          value={methodology.dateRange}
+                          onChange={(e) => setMethodology({...methodology, dateRange: e.target.value})}
+                          style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            border: '1px solid #D1D5DB',
+                            borderRadius: '0.375rem',
+                            fontSize: '1rem'
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>
+                          Session Duration
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g., 45-60 min"
+                          value={methodology.duration}
+                          onChange={(e) => setMethodology({...methodology, duration: e.target.value})}
+                          style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            border: '1px solid #D1D5DB',
+                            borderRadius: '0.375rem',
+                            fontSize: '1rem'
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#374151', marginBottom: '0.5rem' }}>
+                        Research Objectives (Optional)
+                      </label>
+                      <textarea
+                        placeholder="Describe the goals of this research..."
+                        value={methodology.objectives}
+                        onChange={(e) => setMethodology({...methodology, objectives: e.target.value})}
+                        rows={3}
+                        style={{
+                          width: '100%',
+                          padding: '0.5rem',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '0.375rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit',
+                          resize: 'vertical'
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                      <button
+                        onClick={() => setShowMethodologyForm(false)}
+                        style={{
+                          padding: '0.5rem 1.5rem',
+                          backgroundColor: 'white',
+                          color: '#374151',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '0.375rem',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => setShowMethodologyForm(false)}
+                        style={{
+                          padding: '0.5rem 1.5rem',
+                          backgroundColor: '#F9524C',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '0.375rem',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                          fontWeight: 600
+                        }}
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Executive Summary Section */}
