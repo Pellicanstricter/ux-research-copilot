@@ -820,7 +820,7 @@ class KeyInsightSynthesizer(BaseAgent):
             5. Include 2-4 supporting quotes with speaker attribution
             6. Optionally include behavioral patterns observed
             7. Optionally include expected user journey steps
-            8. Include impact metrics when quantifiable (e.g., "9 out of 11 participants")
+            8. ONLY include participant counts (e.g., "9 out of 11 participants") if the data comes from actual interview transcripts with back-and-forth dialogue between interviewer and participant. Do NOT include participant counts for surveys, feedback forms, or written responses.
 
             Return as a JSON array with this structure:
             [
@@ -864,10 +864,12 @@ class KeyInsightSynthesizer(BaseAgent):
             3. Key Insight: The interpretation/meaning of that finding
             4. Recommendation: The primary action stakeholders should take
 
+            IMPORTANT: Only include participant counts if the research data comes from interview transcripts with dialogue between interviewer and participant. For surveys, feedback forms, or written responses, describe findings without participant counts.
+
             Return as JSON:
             {{
               "research_question": "The main research question...",
-              "key_finding": "X out of Y participants preferred/did/said...",
+              "key_finding": "The most important discovery (include participant counts ONLY if from interviews)...",
               "key_insight": "This means that users...",
               "recommendation": "Implement/Change/Prioritize X to achieve Y.",
               "context": "Optional additional context paragraph"
