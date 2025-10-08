@@ -204,7 +204,7 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
               <input
                 type="file"
                 multiple
-                accept=".pdf,.txt,.docx"
+                accept=".pdf,.txt,.docx,.csv"
                 onChange={handleFileChange}
                 style={{ display: 'none' }}
                 id="file-upload"

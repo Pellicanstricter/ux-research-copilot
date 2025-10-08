@@ -57,7 +57,7 @@ async def process_files(
                 continue
                 
             # Validate file type
-            allowed_extensions = {'.pdf', '.docx', '.doc', '.txt'}
+            allowed_extensions = {'.pdf', '.docx', '.doc', '.txt', '.csv'}
             file_extension = Path(file.filename).suffix.lower()
             
             if file_extension not in allowed_extensions:

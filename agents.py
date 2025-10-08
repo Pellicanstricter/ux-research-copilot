@@ -124,6 +124,8 @@ class DocumentIngestor(BaseAgent):
                 text = self._extract_from_docx(file_path)
             elif path.suffix.lower() == '.txt':
                 text = self._extract_from_txt(file_path)
+            elif path.suffix.lower() == '.csv':
+                text = self._extract_from_csv(file_path)
             else:
                 raise ValueError(f"Unsupported file type: {path.suffix}")
             
@@ -192,7 +194,22 @@ class DocumentIngestor(BaseAgent):
         except Exception as e:
             self.logger.error(f"Error extracting TXT {file_path}: {e}")
             raise
-    
+
+    def _extract_from_csv(self, file_path: str) -> str:
+        """Extract text from CSV file"""
+        import csv
+        try:
+            text = ""
+            with open(file_path, 'r', encoding='utf-8') as file:
+                csv_reader = csv.reader(file)
+                for row in csv_reader:
+                    # Join row values with spaces and add newline
+                    text += " ".join(row) + "\n"
+            return text
+        except Exception as e:
+            self.logger.error(f"Error extracting CSV {file_path}: {e}")
+            raise
+
     def _preprocess_text(self, text: str) -> str:
         """Clean and preprocess text"""
         # Remove excessive whitespace
