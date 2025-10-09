@@ -50,10 +50,11 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#F8F9FA' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #F0F9FF 0%, #FFF9F5 100%)' }}>
       {/* Header */}
       <header style={{
-        background: 'linear-gradient(to bottom, #FFFFFF 0%, #FFF9F5 100%)',
+        background: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(10px)',
         borderBottom: '1px solid #E5E7EB',
         padding: '2rem 0 1.5rem 0'
       }}>
@@ -136,8 +137,6 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           textAlign: 'left',
           marginBottom: '1rem',
           padding: '2rem 2rem',
-          background: 'linear-gradient(135deg, #F0F9FF 0%, #FFF9F5 100%)',
-          borderRadius: '1rem',
           transition: 'all 0.3s ease'
         }}>
           <h2 style={{
@@ -230,7 +229,7 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           {/* Upload Files Card */}
           <div className="card" style={{
             minHeight: '320px',
-            borderTop: '4px solid #F4A261',
+            borderTop: '4px solid #C65D5D',
             transition: 'all 0.3s ease',
             cursor: 'pointer'
           }}
@@ -311,7 +310,7 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           <div className="card" style={{
             minHeight: '320px',
             position: 'relative',
-            borderTop: '4px solid #0079C8',
+            borderTop: '4px solid #60A5FA',
             transition: 'all 0.3s ease',
             cursor: 'pointer'
           }}
