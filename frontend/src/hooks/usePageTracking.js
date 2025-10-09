@@ -7,7 +7,8 @@ export const usePageTracking = (pageName) => {
   useEffect(() => {
     const trackPageView = async () => {
       try {
-        await fetch('http://localhost:8001/api/analytics/pageview', {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+        await fetch(`${API_URL}/api/analytics/pageview`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

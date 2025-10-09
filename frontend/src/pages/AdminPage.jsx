@@ -19,9 +19,10 @@ export default function AdminPage({ onBack }) {
 
   const fetchData = async () => {
     try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001';
       const [feedbackRes, analyticsRes] = await Promise.all([
-        fetch('http://localhost:8001/api/admin/feedback'),
-        fetch('http://localhost:8001/api/admin/analytics')
+        fetch(`${API_URL}/api/admin/feedback`),
+        fetch(`${API_URL}/api/admin/analytics`)
       ]);
 
       const feedbackData = await feedbackRes.json();
