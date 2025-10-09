@@ -10,7 +10,7 @@ import analyzeIcon from '../assets/Analyize.png';
 import presentIcon from '../assets/Present.png';
 import folderIcon from '../assets/Folder.png';
 
-export default function UploadPage({ onProcessingStarted, hasSession, onViewResults, onViewSavedReports, onViewSampleReport, onViewAdmin }) {
+export default function UploadPage({ onProcessingStarted, hasSession, onViewResults, onViewSavedReports, onViewSampleReport, onViewAdmin, onViewAbout, onViewPrivacy, onViewTerms, onViewContact }) {
   const [files, setFiles] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -434,6 +434,95 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backdropFilter: 'blur(10px)',
+        borderTop: '1px solid #E5E7EB',
+        padding: '2rem 0',
+        marginTop: '4rem'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={onViewAbout}
+              style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                background: 'none',
+                border: 'none',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#C65D5D'}
+              onMouseLeave={(e) => e.target.style.color = '#6B7280'}
+            >
+              About
+            </button>
+            <button
+              onClick={onViewPrivacy}
+              style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                background: 'none',
+                border: 'none',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#C65D5D'}
+              onMouseLeave={(e) => e.target.style.color = '#6B7280'}
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={onViewTerms}
+              style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                background: 'none',
+                border: 'none',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#C65D5D'}
+              onMouseLeave={(e) => e.target.style.color = '#6B7280'}
+            >
+              Terms of Service
+            </button>
+            <button
+              onClick={onViewContact}
+              style={{
+                fontSize: '0.875rem',
+                color: '#6B7280',
+                background: 'none',
+                border: 'none',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#C65D5D'}
+              onMouseLeave={(e) => e.target.style.color = '#6B7280'}
+            >
+              Contact
+            </button>
+          </div>
+
+          {/* Copyright */}
+          <div style={{ textAlign: 'center', paddingTop: '1rem', borderTop: '1px solid #E5E7EB' }}>
+            <p style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>
+              © {new Date().getFullYear()} UX Research Copilot. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
