@@ -112,7 +112,6 @@ export default function FeedbackWidget() {
           >
             {submitted ? (
               <div style={{ textAlign: 'center', padding: '2rem 0' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
                 <h3 style={{ color: '#201E32', marginBottom: '0.5rem' }}>Thank you!</h3>
                 <p style={{ color: '#6B7280' }}>Your feedback has been submitted.</p>
               </div>
