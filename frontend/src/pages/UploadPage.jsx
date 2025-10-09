@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import { api } from '../services/api';
 import logo from '../assets/logos/ux_research_copilot_logo_transparent.png';
 import owlIcon from '../assets/IconOwl.png';
@@ -50,18 +51,44 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
         padding: '2rem 0 1.5rem 0'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <img src={logo} alt="UX Research Copilot" style={{ height: '140px' }} />
-            <div>
-              <p style={{
-                fontSize: '0.875rem',
-                color: '#6B7280',
-                margin: 0,
-                fontWeight: 500,
-                letterSpacing: '0.05em'
-              }}>
-                AI-POWERED RESEARCH ANALYSIS
-              </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <img src={logo} alt="UX Research Copilot" style={{ height: '140px' }} />
+              <div>
+                <p style={{
+                  fontSize: '0.875rem',
+                  color: '#6B7280',
+                  margin: 0,
+                  fontWeight: 500,
+                  letterSpacing: '0.05em'
+                }}>
+                  AI-POWERED RESEARCH ANALYSIS
+                </p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button style={{
+                    padding: '0.75rem 1.5rem',
+                    backgroundColor: '#C65D5D',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#B54D4D'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#C65D5D'}>
+                    Sign In
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
             </div>
           </div>
         </div>
@@ -91,39 +118,26 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           }}>
             User Interviews to Presentation in <span style={{ color: '#C65D5D', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>One Click<img src={eyesIcon} alt="Eyes" style={{ width: '3.5rem', height: '3.5rem', verticalAlign: 'middle' }} /></span>
           </h2>
-          <p style={{ fontSize: '1.125rem', color: '#6B7280', maxWidth: '900px', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-            Create compelling presentations with your data. Upload your interview transcripts and we'll generate research insights and recommendations in under <span style={{ color: '#0079C8', fontWeight: 600 }}>5 minutes</span>—ready to present.
+          <p style={{ fontSize: '1.125rem', color: '#6B7280', maxWidth: '900px', lineHeight: 1.6 }}>
+            Create compelling presentations with your data. Upload your interview transcripts and we'll generate research insights and recommendations in under 5 minutes—ready to present. <button
+              onClick={onViewSampleReport}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#C65D5D',
+                fontWeight: 700,
+                fontSize: '1.125rem',
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                padding: 0,
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => e.target.style.color = '#B54D4D'}
+              onMouseLeave={(e) => e.target.style.color = '#C65D5D'}
+            >
+              View sample report
+            </button>
           </p>
-          <button
-            onClick={onViewSampleReport}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#0079C8',
-              color: 'white',
-              border: 'none',
-              borderRadius: '0.5rem',
-              fontSize: '1rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#005A9C';
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(0, 121, 200, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = '#0079C8';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
-            }}
-          >
-            <img src={presentIcon} alt="Present" style={{ width: '20px', height: '20px' }} />
-            View Sample Report
-          </button>
         </div>
 
         {/* Navigation Tabs */}
