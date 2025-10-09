@@ -179,7 +179,7 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           <button
             style={{
               padding: '0.75rem 1.5rem',
-              backgroundColor: 'white',
+              backgroundColor: 'transparent',
               border: 'none',
               borderBottom: '3px solid #0079C8',
               color: '#0079C8',
