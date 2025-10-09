@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Process - Simple View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #201E32;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #6B7280;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 2rem;
+            column-gap: 2rem;
+        }
+
+        .step {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .step-number {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #3b82f6;
+            flex-shrink: 0;
+            width: 2rem;
+        }
+
+        .step-content h3 {
+            font-size: 0.875rem;
+            color: #201E32;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            color: #4B5563;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ How I Built the UX Research Copilot with AI</h1>
+            <p>Development Process Step-by-Step</p>
+        </div>
+
+        <div class="process-grid">
+            <div class="step">
+                <div class="step-number">1.</div>
+                <div class="step-content">
+                    <h3>Problem Definition</h3>
+                    <p>Identified time-consuming aspect of translating user feedback into presentations.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2.</div>
+                <div class="step-content">
+                    <h3>AI-Assisted Development</h3>
+                    <p>Used Claude Code within terminal to create code locally—worked much better than copy-pasting in VS Code.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3.</div>
+                <div class="step-content">
+                    <h3>System Architecture</h3>
+                    <p>Designed multi-agent AI architecture using LangChain and OpenAI GPT-4.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4.</div>
+                <div class="step-content">
+                    <h3>Backend Development</h3>
+                    <p>Built FastAPI backend with async processing and Redis for session management.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5.</div>
+                <div class="step-content">
+                    <h3>File Processing</h3>
+                    <p>Created document extraction for PDF, DOCX, TXT, and CSV file formats.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">6.</div>
+                <div class="step-content">
+                    <h3>AI Agent Integration</h3>
+                    <p>Integrated specialized AI agents for theme clustering, insight extraction, and recommendations.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">7.</div>
+                <div class="step-content">
+                    <h3>Theme Clustering</h3>
+                    <p>AI automatically identifies 3-5 key themes from interview transcripts.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">8.</div>
+                <div class="step-content">
+                    <h3>Quote Extraction</h3>
+                    <p>System extracts relevant supporting quotes for each theme automatically.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">9.</div>
+                <div class="step-content">
+                    <h3>Insight Generation</h3>
+                    <p>GPT-4 generates prioritized insights with context and impact analysis.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">10.</div>
+                <div class="step-content">
+                    <h3>Frontend Development</h3>
+                    <p>Built React UI with 16:9 aspect ratio slides for presentation-ready output.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">11.</div>
+                <div class="step-content">
+                    <h3>Prompt Engineering</h3>
+                    <p>Refined AI prompts through testing to improve accuracy and limit theme count.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">12.</div>
+                <div class="step-content">
+                    <h3>Edit Functionality</h3>
+                    <p>Added modal editing so users can modify AI-generated titles and descriptions.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">13.</div>
+                <div class="step-content">
+                    <h3>Delete Capability</h3>
+                    <p>Implemented delete buttons for any slide with real-time state updates.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">14.</div>
+                <div class="step-content">
+                    <h3>Design Refinement</h3>
+                    <p>Applied professional design patterns with color-coded sections and improved visual hierarchy.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">15.</div>
+                <div class="step-content">
+                    <h3>Demo Mode</h3>
+                    <p>Created sample report with realistic data for first-time user demonstration.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">16.</div>
+                <div class="step-content">
+                    <h3>Auto-Generated Goals</h3>
+                    <p>System automatically generates research goals from identified themes.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">17.</div>
+                <div class="step-content">
+                    <h3>Testing & Validation</h3>
+                    <p>Tested with real transcripts and validated &lt;5 minute processing time.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">18.</div>
+                <div class="step-content">
+                    <h3>Production Deployment</h3>
+                    <p>Deployed to Railway with automatic CI/CD from GitHub repository.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">19.</div>
+                <div class="step-content">
+                    <h3>Performance Optimization</h3>
+                    <p>Optimized API endpoints, added lazy loading and progress indicators.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">20.</div>
+                <div class="step-content">
+                    <h3>Critical Evaluation</h3>
+                    <p>Recognized limitations: AI requires human validation, no screenshot integration, no direct PowerPoint export.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

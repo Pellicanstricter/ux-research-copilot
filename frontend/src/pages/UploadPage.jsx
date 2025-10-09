@@ -72,10 +72,11 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
         {/* Hero Section */}
         <div style={{
           textAlign: 'left',
-          marginBottom: '2rem',
-          padding: '2.5rem 2rem',
+          marginBottom: '1rem',
+          padding: '2rem 2rem',
           background: 'linear-gradient(135deg, #F0F9FF 0%, #FFF9F5 100%)',
-          borderRadius: '1rem'
+          borderRadius: '1rem',
+          transition: 'all 0.3s ease'
         }}>
           <h2 style={{
             fontSize: '2.5rem',
@@ -176,9 +177,22 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
         </div>
 
         {/* Cards Section */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
           {/* Upload Files Card */}
-          <div className="card" style={{ minHeight: '400px', borderTop: '4px solid #F4A261' }}>
+          <div className="card" style={{
+            minHeight: '320px',
+            borderTop: '4px solid #F4A261',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#FFF5EE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src={folderIcon} alt="Upload" style={{ width: '28px', height: '28px' }} />
@@ -195,10 +209,11 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
               style={{
                 border: '2px dashed #D1D5DB',
                 borderRadius: '0.5rem',
-                padding: '3rem 2rem',
+                padding: '2rem 1.5rem',
                 textAlign: 'center',
                 marginBottom: '1rem',
                 backgroundColor: files.length > 0 ? '#F0F9FF' : '#FAFAFA',
+                transition: 'all 0.3s ease'
               }}
             >
               <input
@@ -219,7 +234,7 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
                   alignItems: 'center',
                 }}
               >
-                <img src={folderIcon} alt="Upload folder" style={{ width: '64px', height: '64px', marginBottom: '0.5rem' }} />
+                <img src={folderIcon} alt="Upload folder" style={{ width: '56px', height: '56px', marginBottom: '0.5rem' }} />
                 <p style={{ fontSize: '1rem', color: '#201E32', fontWeight: 500, marginBottom: '0.5rem' }}>
                   {files.length > 0 ? `${files.length} files selected` : 'Click to browse or drag files here'}
                 </p>
@@ -244,7 +259,21 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
           </div>
 
           {/* Start Processing Card */}
-          <div className="card" style={{ minHeight: '400px', position: 'relative', borderTop: '4px solid #0079C8' }}>
+          <div className="card" style={{
+            minHeight: '320px',
+            position: 'relative',
+            borderTop: '4px solid #0079C8',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#F0F9FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <img src={analyzeIcon} alt="Processing" style={{ width: '28px', height: '28px' }} />
@@ -262,15 +291,16 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
                 style={{
                   border: '2px dashed #0079C8',
                   borderRadius: '0.5rem',
-                  padding: '3rem 2rem',
+                  padding: '2rem 1.5rem',
                   textAlign: 'center',
                   backgroundColor: '#F0F9FF',
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <img src={owlIcon} alt="Owl" style={{ width: '80px', height: '80px', marginBottom: '1rem', display: 'block', margin: '0 auto 1rem auto' }} />
+                <img src={owlIcon} alt="Owl" style={{ width: '64px', height: '64px', marginBottom: '1rem', display: 'block', margin: '0 auto 1rem auto' }} />
                 <button
                   onClick={handleStartProcessing}
                   disabled={isProcessing}
@@ -292,9 +322,10 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
                 style={{
                   border: '2px dashed #D1D5DB',
                   borderRadius: '0.5rem',
-                  padding: '3rem 2rem',
+                  padding: '2rem 1.5rem',
                   textAlign: 'center',
                   backgroundColor: '#FAFAFA',
+                  transition: 'all 0.3s ease'
                 }}
               >
                 <p style={{ color: '#9CA3AF', fontSize: '1rem' }}>
@@ -321,8 +352,8 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
         )}
 
         {/* How It Works Section */}
-        <div style={{ marginTop: '4rem' }}>
-          <h3 style={{ fontSize: '1.875rem', fontWeight: 600, color: '#201E32', textAlign: 'center', marginBottom: '2rem' }}>
+        <div style={{ marginTop: '3rem', padding: '2rem 0', borderTop: '1px solid #E5E7EB' }}>
+          <h3 style={{ fontSize: '1.875rem', fontWeight: 600, color: '#201E32', textAlign: 'center', marginBottom: '2.5rem' }}>
             How It Works
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '3rem' }}>
@@ -331,8 +362,21 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
               { icon: analyzeIcon, title: 'Analyze', desc: 'AI extracts themes, quotes, and patterns automatically' },
               { icon: presentIcon, title: 'Present', desc: 'Get presentation-ready insights in minutes' },
             ].map((step, index) => (
-              <div key={index} style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <img src={step.icon} alt={step.title} style={{ width: '80px', height: '80px', marginBottom: '1rem', objectFit: 'contain' }} />
+              <div key={index} style={{
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}>
+                <img src={step.icon} alt={step.title} style={{ width: '64px', height: '64px', marginBottom: '1rem', objectFit: 'contain', transition: 'all 0.3s ease' }} />
                 <h4 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#201E32', marginBottom: '0.5rem' }}>
                   {step.title}
                 </h4>

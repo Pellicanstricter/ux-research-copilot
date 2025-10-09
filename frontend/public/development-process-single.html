@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Process - Single Page View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #201E32;
+            margin-bottom: 0.25rem;
+        }
+
+        .header p {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .process-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .phase {
+            background: linear-gradient(135deg, #F0F9FF 0%, #DBEAFE 100%);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .phase-header h2 {
+            font-size: 0.875rem;
+            color: #201E32;
+            font-weight: 700;
+        }
+
+        .phase-description {
+            font-size: 0.75rem;
+            color: #4B5563;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .tech-badge {
+            background: #DBEAFE;
+            color: #1e40af;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.625rem;
+            font-weight: 600;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .methodology-box {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border: 2px solid #F59E0B;
+        }
+
+        .methodology-box h3 {
+            color: #92400E;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .methodology-box h4 {
+            color: #92400E;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        .methodology-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .methodology-box li {
+            color: #78350F;
+            font-size: 0.625rem;
+            margin-bottom: 0.125rem;
+            padding-left: 0.75rem;
+            position: relative;
+        }
+
+        .methodology-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #F59E0B;
+            font-weight: 700;
+        }
+
+        .decisions-box {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border: 2px solid #10b981;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .decisions-box h3 {
+            color: #065F46;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .decision-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .decision-item h4 {
+            color: #065F46;
+            font-size: 0.7rem;
+            margin-bottom: 0.125rem;
+            font-weight: 600;
+        }
+
+        .decision-item p {
+            color: #059669;
+            font-size: 0.625rem;
+            line-height: 1.3;
+        }
+
+        .limitations-box {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border: 2px solid #DC2626;
+        }
+
+        .limitations-box h3 {
+            color: #991B1B;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .limitation-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .limitation-item h4 {
+            color: #991B1B;
+            font-size: 0.7rem;
+            margin-bottom: 0.125rem;
+            font-weight: 600;
+        }
+
+        .limitation-item p {
+            color: #B91C1C;
+            font-size: 0.625rem;
+            line-height: 1.3;
+        }
+
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .metrics-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: white;
+        }
+
+        .metrics-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .metrics-box p {
+            font-size: 0.625rem;
+            opacity: 0.9;
+        }
+
+        .iteration-badge {
+            background: #C65D5D;
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.625rem;
+            font-weight: 700;
+            margin-left: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ UX Research Copilot: AI Development Process & Methodology</h1>
+            <p>From Problem Definition to Production - A Complete AI Engineering Case Study</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Left Column: Development Process -->
+            <div class="process-column">
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-number">1</div>
+                        <h2>Problem Definition & Research</h2>
+                    </div>
+                    <p class="phase-description">
+                        Identified core problem: UX researchers spend hours manually analyzing transcripts and creating presentations. Goal: automate using AI while maintaining quality. Requirements: &lt;5 min processing, presentation-ready output, multiple file formats, editable results.
+                    </p>
+                    <div class="tech-badges">
+                        <span class="tech-badge">User Research</span>
+                        <span class="tech-badge">Requirements Analysis</span>
+                        <span class="tech-badge">Success Metrics</span>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-number">2</div>
+                        <h2>System Architecture & Tech Stack</h2>
+                    </div>
+                    <p class="phase-description">
+                        Multi-agent AI architecture with LangChain + GPT-4. FastAPI for async processing, Redis for sessions, React for responsive UI. Specialized agents: InsightAnalyzer, ThemeClusterer, RecommendationGenerator.
+                    </p>
+                    <div class="tech-badges">
+                        <span class="tech-badge">FastAPI</span>
+                        <span class="tech-badge">Redis</span>
+                        <span class="tech-badge">React</span>
+                        <span class="ai-badge">🤖 LangChain</span>
+                        <span class="ai-badge">🤖 GPT-4</span>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-number">3</div>
+                        <h2>Core Development & AI Integration</h2>
+                    </div>
+                    <p class="phase-description">
+                        Built file upload, AI processing pipeline, presentation generation. Multi-format extraction (PDF, DOCX, TXT, CSV). AI workflow: theme clustering (3-5 themes), quote extraction, insight generation with priority ranking, actionable recommendations.
+                    </p>
+                    <div class="tech-badges">
+                        <span class="tech-badge">Document Processing</span>
+                        <span class="ai-badge">🤖 Multi-Agent System</span>
+                        <span class="tech-badge">16:9 Slides</span>
+                        <span class="tech-badge">Async Tasks</span>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-number">4</div>
+                        <h2>Iterative Refinement & UX <span class="iteration-badge">10+ Iterations</span></h2>
+                    </div>
+                    <p class="phase-description">
+                        Refined AI prompts (theme limit to 5), improved quote accuracy. Applied professional design patterns, color-coded sections, 2-column layouts. Added edit/delete for all slides, created sample demo, auto-generated research goals.
+                    </p>
+                    <div class="tech-badges">
+                        <span class="ai-badge">🤖 Prompt Engineering</span>
+                        <span class="tech-badge">UI/UX Polish</span>
+                        <span class="tech-badge">Modal Editing</span>
+                        <span class="tech-badge">Demo Mode</span>
+                    </div>
+                </div>
+
+                <div class="phase">
+                    <div class="phase-header">
+                        <div class="phase-number">5</div>
+                        <h2>Testing, Deployment & Production</h2>
+                    </div>
+                    <p class="phase-description">
+                        Railway deployment with CI/CD from GitHub. End-to-end testing with real transcripts. Validated &lt;5 min processing, all file formats. Optimized API endpoints, lazy loading, progress indicators.
+                    </p>
+                    <div class="tech-badges">
+                        <span class="tech-badge">Railway</span>
+                        <span class="tech-badge">CI/CD</span>
+                        <span class="tech-badge">Performance Optimization</span>
+                        <span class="tech-badge">Production Monitoring</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Methodology & Decisions -->
+            <div class="sidebar">
+                <div class="methodology-box">
+                    <h3>🎯 Development Methodology</h3>
+                    <h4>Agile Approach</h4>
+                    <ul>
+                        <li>Rapid prototyping with MVP</li>
+                        <li>Continuous feedback loops</li>
+                        <li>Sprint-based iterations</li>
+                    </ul>
+                    <h4>AI-First Design</h4>
+                    <ul>
+                        <li>Prompt engineering iterations</li>
+                        <li>Multi-agent orchestration</li>
+                        <li>Human-in-the-loop editing</li>
+                    </ul>
+                    <h4>User-Centered UX</h4>
+                    <ul>
+                        <li>16:9 presentation format</li>
+                        <li>One-click processing</li>
+                        <li>Editable AI outputs</li>
+                    </ul>
+                </div>
+
+                <div class="decisions-box">
+                    <h3>💡 Key Technical Decisions</h3>
+                    <div class="decision-item">
+                        <h4>Why LangChain + GPT-4?</h4>
+                        <p>Multi-agent orchestration for complex workflows. GPT-4's superior NLU for theme clustering. Specialized prompts per task.</p>
+                    </div>
+                    <div class="decision-item">
+                        <h4>Why FastAPI?</h4>
+                        <p>Native async support for non-blocking processing. Background tasks keep UI responsive during AI analysis.</p>
+                    </div>
+                    <div class="decision-item">
+                        <h4>Why 16:9 Format?</h4>
+                        <p>Industry standard for presentations. Direct screenshot-to-PowerPoint workflow saves time.</p>
+                    </div>
+                </div>
+
+                <div class="limitations-box">
+                    <h3>⚠️ Critical Limitations</h3>
+                    <div class="limitation-item">
+                        <h4>🎯 AI Output Quality</h4>
+                        <p>Insights not always perfect. Depends on transcript clarity. Human validation required.</p>
+                    </div>
+                    <div class="limitation-item">
+                        <h4>📸 No Screenshots</h4>
+                        <p>Cannot incorporate visual assets. Text-only slides. Manual addition needed.</p>
+                    </div>
+                    <div class="limitation-item">
+                        <h4>📊 Limited Export</h4>
+                        <p>No direct PPTX/Google Slides export. Users screenshot or recreate manually.</p>
+                    </div>
+                    <div class="limitation-item">
+                        <h4>🔍 Context Limits</h4>
+                        <p>Large transcripts (20+) may need chunking. Can miss cross-interview patterns.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
+            <div class="metrics-box">
+                <h3>&lt;5min</h3>
+                <p>Processing Time</p>
+            </div>
+            <div class="metrics-box">
+                <h3>100%</h3>
+                <p>AI-Powered Analysis</p>
+            </div>
+            <div class="metrics-box">
+                <h3>4+</h3>
+                <p>File Formats</p>
+            </div>
+            <div class="metrics-box">
+                <h3>16:9</h3>
+                <p>Presentation Slides</p>
+            </div>
+            <div class="metrics-box">
+                <h3>5 Weeks</h3>
+                <p>Development Time</p>
+            </div>
+            <div class="metrics-box">
+                <h3>10+</h3>
+                <p>Design Iterations</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

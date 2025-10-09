@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Process - Compact View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #201E32;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #6B7280;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .step {
+            background: linear-gradient(135deg, #F0F9FF 0%, #DBEAFE 100%);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .step h3 {
+            color: #3b82f6;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .step p {
+            color: #374151;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .step.ai-step {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-left-color: #F59E0B;
+        }
+
+        .step.ai-step h3 {
+            color: #92400E;
+        }
+
+        .step.limitation-step {
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            border-left-color: #DC2626;
+        }
+
+        .step.limitation-step h3 {
+            color: #991B1B;
+        }
+
+        .step.success-step {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border-left-color: #10b981;
+        }
+
+        .step.success-step h3 {
+            color: #065F46;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ How I Built the UX Research Copilot with AI</h1>
+            <p>A step-by-step development journey</p>
+        </div>
+
+        <div class="process-grid">
+            <div class="step">
+                <h3>1. Problem Definition</h3>
+                <p>Identified the time-consuming aspect of translating user feedback into presentations. UX researchers spend hours manually analyzing transcripts and creating slides.</p>
+            </div>
+
+            <div class="step ai-step">
+                <h3>2. System Architecture & AI Setup</h3>
+                <p>Used AI to start building the app. I used Claude Code within my terminal to create code locally—this worked much better than copy-pasting code in Visual Studio Code and streamlined the development process.</p>
+            </div>
+
+            <div class="step">
+                <h3>3. Core Development</h3>
+                <p>Built file upload system supporting PDF, DOCX, TXT, and CSV. Created FastAPI backend with async processing and React frontend with 16:9 presentation slides.</p>
+            </div>
+
+            <div class="step ai-step">
+                <h3>4. AI Integration</h3>
+                <p>Integrated LangChain with OpenAI GPT-4 to create multi-agent system. AI automatically clusters themes (3-5 max), extracts supporting quotes, generates insights with priority ranking, and creates actionable recommendations.</p>
+            </div>
+
+            <div class="step">
+                <h3>5. Iterative Refinement</h3>
+                <p>Refined AI prompts through testing to limit themes and improve accuracy. Added edit/delete functionality for all slides. Applied professional design patterns with color-coded sections and improved visual hierarchy.</p>
+            </div>
+
+            <div class="step">
+                <h3>6. User Experience Polish</h3>
+                <p>Created sample report demo for first-time users. Added modal editing so users can modify AI-generated content. Implemented auto-generated research goals from themes.</p>
+            </div>
+
+            <div class="step success-step">
+                <h3>7. Production Deployment</h3>
+                <p>Deployed to Railway with automatic CI/CD from GitHub. Tested with real transcripts and validated &lt;5 minute processing time. Set up Redis for session management and result persistence.</p>
+            </div>
+
+            <div class="step limitation-step">
+                <h3>8. Critical Evaluation</h3>
+                <p>Recognized key limitations: AI output requires human validation, no screenshot/visual asset integration, no direct PowerPoint export. Future improvements include PPTX export, image upload support, and confidence scoring for insights.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
