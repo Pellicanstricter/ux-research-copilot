@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { usePageTracking } from '../hooks/usePageTracking';
 import logo from '../assets/logos/ux_research_copilot_logo_transparent.png';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export default function SavedReportsPage({ onLoadReport, onBack, hasSession, onViewResults }) {
+  // Track page view
+  usePageTracking('saved-reports');
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

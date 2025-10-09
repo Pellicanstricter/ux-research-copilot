@@ -12,7 +12,7 @@ import redis
 
 from config import CONFIG
 from agents import UXResearchOrchestrator
-from models import ProcessingStatus
+from models import ProcessingStatus, FeedbackSubmission
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -41,34 +41,37 @@ async def process_files(
     """Process uploaded research files"""
     if not files:
         raise HTTPException(status_code=400, detail="No files provided")
-    
+
     # Validate OpenAI API key
     if not CONFIG.openai_api_key:
         raise HTTPException(
-            status_code=500, 
+            status_code=500,
             detail="OpenAI API key not configured. Please set OPENAI_API_KEY in your .env file"
         )
-    
+
     # Save uploaded files temporarily
     temp_paths = []
+    file_types = []
     try:
         for file in files:
             if not file.filename:
                 continue
-                
+
             # Validate file type
             allowed_extensions = {'.pdf', '.docx', '.doc', '.txt', '.csv'}
             file_extension = Path(file.filename).suffix.lower()
-            
+
             if file_extension not in allowed_extensions:
                 raise HTTPException(
-                    status_code=400, 
+                    status_code=400,
                     detail=f"Unsupported file type: {file_extension}. Supported: {', '.join(allowed_extensions)}"
                 )
-            
+
+            file_types.append(file_extension)
+
             # Save to temporary location
             with tempfile.NamedTemporaryFile(
-                delete=False, 
+                delete=False,
                 suffix=file_extension,
                 prefix="ux_research_"
             ) as temp_file:
@@ -84,12 +87,30 @@ async def process_files(
         random_suffix = hashlib.md5(str(datetime.now()).encode()).hexdigest()[:8]
         session_id = f"ux_research_{timestamp}_{random_suffix}"
 
+        # Track analytics: file types
+        try:
+            redis_client = redis.Redis(
+                host=CONFIG.redis_host,
+                port=CONFIG.redis_port,
+                password=CONFIG.redis_password if CONFIG.redis_password else None,
+                decode_responses=True
+            )
+
+            for file_type in file_types:
+                redis_client.hincrby('analytics:file_types', file_type, 1)
+
+            # Track processing session
+            redis_client.incr('analytics:total_sessions')
+            redis_client.hincrby('analytics:sessions_by_date', datetime.now().strftime('%Y-%m-%d'), 1)
+        except Exception as e:
+            logger.warning(f"Could not track analytics: {e}")
+
         background_tasks.add_task(
             process_files_background,
             temp_paths,
             session_id
         )
-        
+
         return JSONResponse({
             "session_id": session_id,
             "status": "processing",
@@ -397,18 +418,163 @@ async def download_report(session_id: str, report_type: str):
         media_type="application/octet-stream"
     )
 
+@app.post("/api/feedback")
+async def submit_feedback(submission: FeedbackSubmission):
+    """Submit user feedback via email"""
+    import smtplib
+    from email.mime.text import MIMEText
+    from email.mime.multipart import MIMEMultipart
+
+    try:
+        # For now, just log the feedback
+        # You can add email sending later
+        logger.info(f"Feedback received from {submission.name} ({submission.email})")
+        logger.info(f"Feedback: {submission.feedback}")
+
+        # Store in Redis for your review
+        try:
+            redis_client = redis.Redis(
+                host=CONFIG.redis_host,
+                port=CONFIG.redis_port,
+                password=CONFIG.redis_password if CONFIG.redis_password else None,
+                decode_responses=True
+            )
+
+            feedback_id = f"feedback:{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            redis_client.hset(feedback_id, mapping={
+                'name': submission.name,
+                'email': submission.email,
+                'feedback': submission.feedback,
+                'submitted_at': datetime.now().isoformat()
+            })
+            redis_client.sadd('feedback_list', feedback_id)
+
+        except Exception as e:
+            logger.warning(f"Could not store feedback in Redis: {e}")
+
+        return {
+            "status": "success",
+            "message": "Thank you for your feedback!"
+        }
+
+    except Exception as e:
+        logger.error(f"Error submitting feedback: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to submit feedback")
+
+@app.post("/api/analytics/pageview")
+async def track_pageview(data: dict):
+    """Track page view"""
+    try:
+        redis_client = redis.Redis(
+            host=CONFIG.redis_host,
+            port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
+            decode_responses=True
+        )
+
+        page = data.get('page', 'unknown')
+        user_id = data.get('user_id', 'anonymous')
+
+        # Increment total page views
+        redis_client.incr('analytics:total_pageviews')
+
+        # Track by page
+        redis_client.hincrby('analytics:pageviews_by_page', page, 1)
+
+        # Track unique visitors (using set)
+        redis_client.sadd('analytics:unique_visitors', user_id)
+
+        # Track by date
+        redis_client.hincrby('analytics:pageviews_by_date', datetime.now().strftime('%Y-%m-%d'), 1)
+
+        return {"status": "success"}
+
+    except Exception as e:
+        logger.warning(f"Could not track pageview: {e}")
+        return {"status": "error"}
+
+@app.get("/api/admin/feedback")
+async def get_all_feedback():
+    """Get all feedback submissions (admin only)"""
+    try:
+        redis_client = redis.Redis(
+            host=CONFIG.redis_host,
+            port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
+            decode_responses=True
+        )
+
+        feedback_ids = redis_client.smembers('feedback_list')
+        feedback_list = []
+
+        for feedback_id in feedback_ids:
+            feedback_data = redis_client.hgetall(feedback_id)
+            if feedback_data:
+                feedback_list.append(feedback_data)
+
+        # Sort by submitted_at descending
+        feedback_list.sort(key=lambda x: x.get('submitted_at', ''), reverse=True)
+
+        return {"feedback": feedback_list}
+
+    except Exception as e:
+        logger.error(f"Error getting feedback: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve feedback")
+
+@app.get("/api/admin/analytics")
+async def get_analytics():
+    """Get analytics data (admin only)"""
+    try:
+        redis_client = redis.Redis(
+            host=CONFIG.redis_host,
+            port=CONFIG.redis_port,
+            password=CONFIG.redis_password if CONFIG.redis_password else None,
+            decode_responses=True
+        )
+
+        # Get total page views
+        total_pageviews = redis_client.get('analytics:total_pageviews') or 0
+
+        # Get unique visitors count
+        unique_visitors = redis_client.scard('analytics:unique_visitors') or 0
+
+        # Get total sessions
+        total_sessions = redis_client.get('analytics:total_sessions') or 0
+
+        # Get file types
+        file_types = redis_client.hgetall('analytics:file_types') or {}
+
+        # Get sessions by date (last 30 days)
+        sessions_by_date = redis_client.hgetall('analytics:sessions_by_date') or {}
+
+        # Get pageviews by page
+        pageviews_by_page = redis_client.hgetall('analytics:pageviews_by_page') or {}
+
+        return {
+            "total_pageviews": int(total_pageviews),
+            "unique_visitors": int(unique_visitors),
+            "total_sessions": int(total_sessions),
+            "file_types": {k: int(v) for k, v in file_types.items()},
+            "sessions_by_date": {k: int(v) for k, v in sessions_by_date.items()},
+            "pageviews_by_page": {k: int(v) for k, v in pageviews_by_page.items()}
+        }
+
+    except Exception as e:
+        logger.error(f"Error getting analytics: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve analytics")
+
 @app.get("/api/v1/health")
 async def health_check():
     """Health check endpoint"""
     from datetime import datetime
     import redis
-    
+
     health_status = {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
         "services": {}
     }
-    
+
     # Check Redis connection
     try:
         redis_client = redis.Redis(
@@ -422,13 +588,13 @@ async def health_check():
     except:
         health_status["services"]["redis"] = "disconnected"
         health_status["status"] = "unhealthy"
-    
+
     # Check OpenAI API key
     health_status["services"]["openai"] = "configured" if CONFIG.openai_api_key else "missing_api_key"
-    
+
     if not CONFIG.openai_api_key:
         health_status["status"] = "unhealthy"
-    
+
     return health_status
 
 @app.exception_handler(Exception)

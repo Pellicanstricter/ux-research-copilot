@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
+import { usePageTracking } from '../hooks/usePageTracking';
 import logo from '../assets/logos/ux_research_copilot_logo_transparent.png';
 import owlIcon from '../assets/IconOwl.png';
 import ExportMenu from '../components/ExportMenu';
 
 export default function ResultsPage({ sessionId, onBack, onViewSavedReports, isSampleReport, sampleData }) {
+  // Track page view
+  usePageTracking('results');
   const [results, setResults] = useState(null);
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);

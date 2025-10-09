@@ -2,6 +2,8 @@ import { useState } from 'react';
 import UploadPage from './pages/UploadPage';
 import ResultsPage from './pages/ResultsPage';
 import SavedReportsPage from './pages/SavedReportsPage';
+import AdminPage from './pages/AdminPage';
+import FeedbackWidget from './components/FeedbackWidget';
 import { sampleReport } from './data/sampleReport';
 import './index.css';
 
@@ -44,15 +46,22 @@ function App() {
     setCurrentPage('results');
   };
 
+  const goToAdmin = () => {
+    setCurrentPage('admin');
+  };
+
   return (
     <>
-      {currentPage === 'upload' ? (
+      {currentPage === 'admin' ? (
+        <AdminPage onBack={goToUpload} />
+      ) : currentPage === 'upload' ? (
         <UploadPage
           onProcessingStarted={goToResults}
           hasSession={!!sessionId}
           onViewResults={goBackToResults}
           onViewSavedReports={goToSavedReports}
           onViewSampleReport={goToSampleReport}
+          onViewAdmin={goToAdmin}
         />
       ) : currentPage === 'savedReports' ? (
         <SavedReportsPage
@@ -70,6 +79,7 @@ function App() {
           sampleData={isSampleReport ? sampleReport : null}
         />
       )}
+      <FeedbackWidget />
     </>
   );
 }

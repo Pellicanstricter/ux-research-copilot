@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
 from datetime import datetime
 from enum import Enum
@@ -8,6 +8,12 @@ class ProcessingStatus(Enum):
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
+
+class FeedbackSubmission(BaseModel):
+    """User feedback submission"""
+    feedback: str = Field(description="User feedback text")
+    email: str = Field(description="User email address")
+    name: str = Field(default="Anonymous User", description="User name")
 
 class InsightData(BaseModel):
     quote: str = Field(description="Exact quote from transcript")

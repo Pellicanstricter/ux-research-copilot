@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/clerk-react';
 import { api } from '../services/api';
+import { usePageTracking } from '../hooks/usePageTracking';
 import logo from '../assets/logos/ux_research_copilot_logo_transparent.png';
 import owlIcon from '../assets/IconOwl.png';
 import eyesIcon from '../assets/icon eyes.png';
@@ -9,12 +10,18 @@ import analyzeIcon from '../assets/Analyize.png';
 import presentIcon from '../assets/Present.png';
 import folderIcon from '../assets/Folder.png';
 
-export default function UploadPage({ onProcessingStarted, hasSession, onViewResults, onViewSavedReports, onViewSampleReport }) {
+export default function UploadPage({ onProcessingStarted, hasSession, onViewResults, onViewSavedReports, onViewSampleReport, onViewAdmin }) {
   const [files, setFiles] = useState([]);
   const [sessionId, setSessionId] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const { user } = useUser();
+
+  const isAdmin = user?.primaryEmailAddress?.emailAddress === 'steinrueckn@gmail.com';
+
+  // Track page view
+  usePageTracking('upload');
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -67,6 +74,34 @@ export default function UploadPage({ onProcessingStarted, hasSession, onViewResu
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {isAdmin && (
+                <button
+                  onClick={onViewAdmin}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: 'transparent',
+                    color: '#6B7280',
+                    border: '1px solid #D1D5DB',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#F3F4F6';
+                    e.target.style.borderColor = '#C65D5D';
+                    e.target.style.color = '#C65D5D';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                    e.target.style.borderColor = '#D1D5DB';
+                    e.target.style.color = '#6B7280';
+                  }}
+                >
+                  Admin
+                </button>
+              )}
               <SignedOut>
                 <SignInButton mode="modal">
                   <button style={{
